@@ -1,13 +1,11 @@
 local os = require("os")
 
-local _M = {}
+local M = {}
 
 local ENV_VAR_LOG_FILE = "END_LOG_FILE"
 
 local DEFAULT_LOG_FILEPATH = "~/.local/state/end/end.log"
 
---- @param path string
---- @return string
 local function expand_home(path)
   local home = os.getenv("HOME")
   if home == nil then
@@ -17,9 +15,6 @@ local function expand_home(path)
   return res
 end
 
---- @param name string
---- @param default string
---- @return string
 local function get_default_env(name, default)
   local val = os.getenv(name)
   if val == nil then
@@ -28,9 +23,10 @@ local function get_default_env(name, default)
   return val
 end
 
----@return string
-function _M.get_log_file()
+--- Get the log file name as configured.
+--- @return string
+function M.get_log_file()
   return expand_home(get_default_env(ENV_VAR_LOG_FILE, DEFAULT_LOG_FILEPATH))
 end
 
-return _M
+return M
