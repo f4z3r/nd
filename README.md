@@ -1,6 +1,6 @@
-# end
+# nd
 
-`end` is a time tracking tool supporting the following features:
+`nd` (pronounced "end") is a time tracking tool supporting the following features:
 
 - [ ] storing worklogs with projects, tags, and descriptions
 - [ ] pomodoro timer on projects
@@ -25,13 +25,13 @@
 ## Entries
 
 ```bash
-end add "project: bla +tag @context"
+nd add "project: bla +tag @context"
 ```
 
 ## Reporting
 
 ```bash
-end report [<date>] [context | tag | project ...]
+nd report [<date>] [context | tag | project ...]
 ```
 
 If the date is not provided, should report for the current date.
@@ -51,10 +51,10 @@ Pause explicitely not supported because it should not be paused and continued
 
 ```bash
 # content description ignored on rest
-end pomo start "project: description +tag @context" [-c | --current]
-end pomo stop [-c | --current]
-end pomo toggle [-c | --current]
-end pomo show [-d | --description] [--tags] [--context] [-p | --project] [--count] [-c | --current] [-t | --type] [-f | --format]
+nd pomo start "project: description +tag @context" [-c | --current]
+nd pomo stop [-c | --current]
+nd pomo toggle [-c | --current]
+nd pomo show [-d | --description] [--tags] [--context] [-p | --project] [--count] [-c | --current] [-t | --type] [-f | --format]
 # 23:45
 ```
 
@@ -85,10 +85,10 @@ State stored in end log.
 
 ## Configuration
 
-- `END_LOG_FILE`: default `~/.local/state/end.log`
-- `END_EVENT_PLUGINS_DIR`: default `~/.local/share/end/event-plugins/`
+- `ND_LOG_FILE`: default `~/.local/state/nd.log`
+- `ND_EVENT_PLUGINS_DIR`: default `~/.local/share/nd/event-plugins/`
    All plugins are called with JSON object for event (pomo event, report, add)
-- `END_CMD_PLUGINS_DIR`: default `~/.local/share/end/cmd-plugins/`
+- `ND_CMD_PLUGINS_DIR`: default `~/.local/share/nd/cmd-plugins/`
    Command name taken from file name (first part before first dot), called with params and entry
    information for the day in JSON form
 

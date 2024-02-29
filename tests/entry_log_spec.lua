@@ -1,5 +1,5 @@
 context("Given entries in the log file,", function()
-  local entry_log = require("end.entry_log")
+  local entry_log = require("nd.entry_log")
 
   local basic_entry = entry_log.Entry.from_str("2024-02-28 11:00 hello")
   local basic_entry_with_tags = entry_log.Entry.from_str("2024-02-28 11:00 hello +tag1 +tag2")

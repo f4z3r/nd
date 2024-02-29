@@ -1,9 +1,10 @@
 local date = require("date")
 local io = require("io")
 local string = require("string")
+local pth = require("path")
 
-local config = require("end.config")
-local utils = require("end.utils")
+local config = require("nd.config")
+local utils = require("nd.utils")
 
 local DATETIME_LEN = ("2023-05-31 12:30"):len()
 
@@ -118,6 +119,14 @@ function M.edit_log()
   end
   local filename = config.get_log_file()
   os.execute(string.format("%s %s '%s'", editor, flags, filename))
+end
+
+function M.ensure_exists()
+  local filename = config.get_log_file()
+  local dir = pth.dirname(filename)
+  if not pth.exists(dir) then
+    pth.mkdir(dir)
+  end
 end
 
 return M
