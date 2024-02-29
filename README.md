@@ -4,7 +4,35 @@
 
 - [ ] storing worklogs with projects, tags, and descriptions
 - [ ] pomodoro timer on projects
-- [ ] plugins on events
+- [ ] extensible via a plugin system
+
+## Usage
+
+Use the `nd -h` to get help on how to use the command.
+
+## Format
+
+TODO
+
+## Plugins
+
+TODO
+
+## TODO
+
+- [ ] basic behaviour
+  - [x] hello command
+  - [x] add command
+  - [x] edit command
+  - [ ] report command
+    - [ ] basic report
+    - [ ] filtering
+  - [ ] extend command
+- [ ] pomodoro
+- [ ] improve reporting output
+- [ ] write sample plugin for jira booking
+
+---
 
 ## Format
 

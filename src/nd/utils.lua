@@ -6,7 +6,7 @@ local M = {}
 
 M.DEFAULT_EDITOR = "nvim"
 
----Get env variable or return the default.
+---get env variable or return the default.
 ---@param name string
 ---@param default string
 ---@return string
@@ -16,7 +16,7 @@ function M.get_default_env(name, default)
   return val
 end
 
----Split multiline string into table of lines.
+---split multiline string into table of lines.
 ---@param str string
 ---@return table
 function M.split_into_lines(str)
@@ -33,7 +33,7 @@ function M.split_into_lines(str)
   return result
 end
 
----Trim indents from multiline strings.
+---trim indents from multiline strings.
 ---@param str string
 ---@return string
 function M.trim_indents(str)

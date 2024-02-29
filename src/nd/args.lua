@@ -5,6 +5,8 @@ local utils = require("nd.utils")
 
 local M = {}
 
+---parse the command line arguments.
+---@return table
 function M.parse()
   local parser = argparse()
     :name("nd")
