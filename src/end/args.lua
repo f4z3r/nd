@@ -17,6 +17,8 @@ function M.parse()
   local report = parser:command("report", "Report activity for a day.")
   report:argument("date", "The date of the report.", date():fmt("%F"))
 
+  local _ = parser:command("edit", "Edit the entry log manually.")
+
   return parser:parse()
 end
 

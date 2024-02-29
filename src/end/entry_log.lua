@@ -3,6 +3,7 @@ local io = require("io")
 local string = require("string")
 
 local config = require("end.config")
+local utils = require("end.utils")
 
 local DATETIME_LEN = ("2023-05-31 12:30"):len()
 
@@ -10,7 +11,7 @@ local M = {}
 
 M.Entry = {}
 
---- Create a new entry
+---Create a new entry
 function M.Entry:new(o)
   o = o or {}
   setmetatable(o, self)
@@ -57,8 +58,8 @@ local function extract_time(raw)
   return date(timestamp)
 end
 
---- Create an Entry based on a string from the log file.
---- @param raw string
+---Create an Entry based on a string from the log file.
+---@param raw string
 function M.Entry.from_str(raw)
   return M.Entry:new({
     timestamp = extract_time(raw),
@@ -70,15 +71,15 @@ function M.Entry.from_str(raw)
   })
 end
 
---- Return the number of completed pomodoros in this entry.
---- @return number
+---Return the number of completed pomodoros in this entry.
+---@return number
 function M.Entry:pomodoros()
   if self.pomo_str == nil then return 0 end
   return self.pomo_str:gsub("-", ""):len()
 end
 
---- Adds a raw string as an entry to the entry log with the current time.
---- @param raw string
+---Adds a raw string as an entry to the entry log with the current time.
+---@param raw string
 function M.add(raw)
   local out = assert(io.open(config.get_log_file(), "a+"))
   local now = date():fmt("%Y-%m-%d %H:%M")
@@ -86,16 +87,16 @@ function M.add(raw)
   out:close()
 end
 
---- Returns the last entry in the entry log.
---- @return string
+---Returns the last entry in the entry log.
+---@return string
 function M.get_last_entry()
   local lines = assert(io.lines(config.get_log_file()))
   return M.Entry.from_str(lines[#lines])
 end
 
---- Returns the entries from the entry log for the provided date.
---- @param raw_date string
---- @return table
+---Returns the entries from the entry log for the provided date.
+---@param raw_date string Using the format 2024-02-28
+---@return table
 function M.get_entries(raw_date)
   local res = {}
   for line in assert(io.lines(config.get_log_file())) do
@@ -106,6 +107,17 @@ function M.get_entries(raw_date)
     ::continue::
   end
   return res
+end
+
+---Edit the entry log manually using the configured $EDITOR
+function M.edit_log()
+  local editor = utils.get_default_env("EDITOR", utils.DEFAULT_EDITOR)
+  local flags = ""
+  if editor == "nvim" or editor == "vim" then
+    flags = "+"
+  end
+  local filename = config.get_log_file()
+  os.execute(string.format("%s %s '%s'", editor, flags, filename))
 end
 
 return M
