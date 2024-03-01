@@ -24,12 +24,14 @@ function Table:headers(...)
 end
 
 function Table:render()
+  local res = {}
   local format_str = self:format_str()
   self:replace_nil()
-  print(colors("%{whitebg black}"..string.format(format_str, unpack(self._headers))))
+  res[#res + 1] = colors("%{whitebg black}"..string.format(format_str, unpack(self._headers)))
   for _, row in ipairs(self._data) do
-    print(string.format(format_str, unpack(row)))
+    res[#res+1] = string.format(format_str, unpack(row))
   end
+  return table.concat(res, "\n")
 end
 
 ---@private

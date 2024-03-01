@@ -85,7 +85,7 @@ function Report:render()
     return acc + val
   end)
   tbl:row("total", "", "", "", string.format("%dm", sum))
-  tbl:render()
+  print(tbl:render())
 end
 
 ---add a list of records to the report
