@@ -1,3 +1,5 @@
+local string = require("string")
+
 local entry_log = require("nd.entry_log")
 local report = require("nd.report")
 
@@ -12,7 +14,8 @@ local function handle_hello(_)
 end
 
 local function handle_report(options)
-  report.simple_report(options.date)
+  print(string.format("Showing report for %s", options.date))
+  report.simple_report(options.date, options.project, options.context, options.tag)
 end
 
 local function handle_edit(_)

@@ -25,7 +25,7 @@ function M.parse()
 
     <project>: <description>
 
-    - <project>: is optional, can end with an '!' to ommit in the reporting.
+    - <project>: is optional, can start with an '!' to ommit in the reporting.
     - <descrpition>: any string. Can contain any number of tags marked with '+'
       and at most on context marked with '@'.
 
@@ -40,6 +40,9 @@ function M.parse()
     ]]))
 
   report:argument("date", "The date of the report.", date():fmt("%F"))
+  report:option("-p --project", "Project to filter by.")
+  report:option("-c --context", "Context to filter by.")
+  report:option("-t --tag", "Tags to filter by."):count("*")
 
   local _ = parser:command("edit"):summary("Edit the entry log manually."):description(utils.trim_indents([[
     Launch your editor and open the entry log. This enables editing the entry log

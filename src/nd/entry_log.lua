@@ -21,7 +21,7 @@ local function extract_pomodoros(raw)
 end
 
 local function extract_project(raw)
-  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d %**%-? (%S+):"
+  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d %**%-?%s?(%S+):"
   local project = string.match(raw, pattern)
   if project ~= nil and project:sub(1, 1) == "!" then return project:sub(2) end
   return project
@@ -41,7 +41,7 @@ local function extract_tags(raw)
   for match in string.gmatch(raw, pattern) do
     res[#res + 1] = match
   end
-  return res
+  return utils.Set:new(res)
 end
 
 local function extract_time(raw)
@@ -55,7 +55,7 @@ local M = {}
 ---@class Entry
 ---@field timestamp table
 ---@field description string
----@field tags table
+---@field tags Set
 ---@field pomodoros number
 ---@field project string?
 ---@field context string?
