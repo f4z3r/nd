@@ -126,11 +126,9 @@ end
 function M.get_entries(raw_date)
   local res = {}
   for line in assert(io.lines(config.get_log_file())) do
-    if string.find(line, raw_date, nil, true) ~= 1 then
-      goto continue
+    if string.find(line, raw_date, nil, true) == 1 then
+      res[#res + 1] = Entry.from_str(line)
     end
-    res[#res + 1] = Entry.from_str(line)
-    ::continue::
   end
   return res
 end

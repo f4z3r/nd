@@ -1,3 +1,5 @@
+require("compat53")
+
 local args = require("nd.args")
 local commands = require("nd.commands")
 

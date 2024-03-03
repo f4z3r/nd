@@ -1,6 +1,8 @@
 local math = require("math")
 local string = require("string")
-local colors = require("ansicolors")
+local table = require("table")
+
+local text = require("nd.luatext")
 
 local M = {}
 
@@ -27,9 +29,14 @@ function Table:render()
   local res = {}
   local format_str = self:format_str()
   self:replace_nil()
-  res[#res + 1] = colors("%{whitebg black}"..string.format(format_str, unpack(self._headers)))
+  res[#res + 1] = text
+    :new(string.format(format_str, table.unpack(self._headers)))
+    :bg(text.Color.White)
+    :fg(text.Color.Black)
+    :bold()
+    :render()
   for _, row in ipairs(self._data) do
-    res[#res+1] = string.format(format_str, unpack(row))
+    res[#res + 1] = string.format(format_str, table.unpack(row))
   end
   return table.concat(res, "\n")
 end

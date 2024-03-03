@@ -110,9 +110,15 @@ function M.simple_report(raw_date, project_filter, context_filter, tag_filter)
     record:update_duration_since(entries[idx - 1])
     report:add_record(record)
   end
-  if project_filter then report:filter_project(project_filter) end
-  if context_filter then report:filter_context(context_filter) end
-  if #tag_filter > 0 then report:filter_tags(unpack(tag_filter)) end
+  if project_filter then
+    report:filter_project(project_filter)
+  end
+  if context_filter then
+    report:filter_context(context_filter)
+  end
+  if #tag_filter > 0 then
+    report:filter_tags(table.unpack(tag_filter))
+  end
   report:render()
 end
 
