@@ -1,4 +1,5 @@
 local os = require("os")
+local math = require("math")
 local string = require("string")
 local table = require("table")
 
@@ -31,6 +32,22 @@ function M.split_into_lines(str)
   end
   table.insert(result, string.sub(str, from))
   return result
+end
+
+---escape single quotes in string
+---@param str string
+---@return string
+function M.string_escape(str)
+  local res, _ = string.gsub(str, "'", "\\'")
+  res, _ = string.gsub(res, '"', '\\"')
+  return res
+end
+
+---convert to integer
+---@param val number
+---@return number
+function M.int(val)
+  return math.floor(val)
 end
 
 ---trim indents from multiline strings.

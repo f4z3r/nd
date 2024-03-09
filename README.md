@@ -6,6 +6,28 @@
 - [ ] pomodoro timer on projects
 - [ ] extensible via a plugin system
 
+
+## TODO
+
+- [ ] add systemd timer
+- [ ] add a few tests
+- [ ] integrate into setup
+- [ ] improve docs
+- [ ] improve reporting
+
+
+## deps
+
+- aplay
+- notify-send (lib-notify)
+- systemd
+
+- date
+- luatables
+- luatext
+- rapidjson
+
+
 ## Usage
 
 Use the `nd -h` to get help on how to use the command.

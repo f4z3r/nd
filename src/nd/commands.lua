@@ -2,6 +2,7 @@ local string = require("string")
 
 local entry_log = require("nd.entry_log")
 local report = require("nd.report")
+local pomo = require("nd.pomo")
 
 local function handle_add(options)
   entry_log.ensure_exists()
