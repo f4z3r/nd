@@ -14,24 +14,23 @@ local function extract_context(raw)
 end
 
 local function extract_pomodoros(raw)
-  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d (%**%-?)"
+  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d ([%*%+%-]*)"
   local pomo_str = string.match(raw, pattern)
-  if pomo_str == nil then return pomo_str, 0 end
-  return pomo_str, pomo_str:gsub("-", ""):len()
+  return pomo_str or ""
 end
 
 local function extract_project(raw)
-  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d %**%-?%s?(%S+):"
+  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d [%*%+%-]*%s?(%S+):"
   local project = string.match(raw, pattern)
   if project ~= nil and project:sub(1, 1) == "!" then return project:sub(2) end
   return project
 end
 
 local function extract_description(raw)
-  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d %**%-?%s?%S+: (.+)$"
+  local pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d [%*%+%-]*%s?%S+: (.+)$"
   local desc = string.match(raw, pattern)
   if desc ~= nil then return desc end
-  pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d %**%-?%s?(.+)$"
+  pattern = "%d%d%d%d%-%d%d%-%d%d %d%d:%d%d [%*%+%-]*%s?(.+)$"
   return string.match(raw, pattern)
 end
 
@@ -49,16 +48,16 @@ local function extract_time(raw)
   return date(timestamp)
 end
 
-local M = {}
+local entry_log = {}
 
 ---a log entry.
 ---@class Entry
 ---@field timestamp table
 ---@field description string
 ---@field tags Set
----@field pomodoros number
 ---@field project string?
 ---@field context string?
+---@field private pomo_str string
 local Entry = {}
 
 ---create a new entry.
@@ -74,7 +73,6 @@ end
 ---create an Entry based on a string from the log file.
 ---@param raw string
 function Entry.from_str(raw)
-  local pomo_str, pomodoros = extract_pomodoros(raw)
   return Entry:new({
     raw = raw,
     timestamp = extract_time(raw),
@@ -82,23 +80,15 @@ function Entry.from_str(raw)
     description = extract_description(raw),
     context = extract_context(raw),
     tags = extract_tags(raw),
-    pomo_str = pomo_str,
-    pomodoros = pomodoros,
+    pomo_str = extract_pomodoros(raw),
   })
-end
-
----return if the entry has an active pomodoro
----@return boolean
-function Entry:is_active()
-  return self.pomo_str:find("-") == #self.pomo_str
 end
 
 ---return the number of minutes that elapsed since the other entry
 ---@param other Entry
----@return number
+---@return dateObject
 function Entry:since(other)
-  local diff = self.timestamp - other.timestamp
-  return diff:spanminutes()
+  return self.timestamp - other.timestamp
 end
 
 ---returns whether the entry is in the past
@@ -108,11 +98,32 @@ function Entry:is_past()
   return self.timestamp < now
 end
 
-M.Entry = Entry
+---return the number of pomodoros in the entry
+---@return integer
+function Entry:pomodoros()
+  local _, count = string.gsub(self.pomo_str, "%*", "*")
+  return count
+end
+
+---return the number of breaks in the entry
+---@return integer
+function Entry:breaks()
+  local _, count = string.gsub(self.pomo_str, "%-", "-")
+  return count
+end
+
+---return the number of long breaks in the entry
+---@return integer
+function Entry:long_breaks()
+  local _, count = string.gsub(self.pomo_str, "%+", "+")
+  return count
+end
+
+entry_log.Entry = Entry
 
 ---adds a raw string as an entry to the entry log with the current time.
 ---@param raw string
-function M.add(raw, prefix)
+function entry_log.add(raw, prefix)
   prefix = prefix or ""
   local out = assert(io.open(config.get_log_file(), "a+"))
   local now = date():fmt("%Y-%m-%d %H:%M")
@@ -123,7 +134,7 @@ end
 ---returns the entries from the entry log for the provided date.
 ---@param raw_date string Using the format 2024-02-28
 ---@return table
-function M.get_entries(raw_date)
+function entry_log.get_entries(raw_date)
   local res = {}
   for line in assert(io.lines(config.get_log_file())) do
     if string.find(line, raw_date, nil, true) == 1 then
@@ -134,7 +145,7 @@ function M.get_entries(raw_date)
 end
 
 ---edit the entry log manually using the configured $EDITOR
-function M.edit_log()
+function entry_log.edit_log()
   local editor = utils.get_default_env("EDITOR", utils.DEFAULT_EDITOR)
   local flags = ""
   if editor == "nvim" or editor == "vim" then
@@ -145,7 +156,7 @@ function M.edit_log()
 end
 
 ---ensure the entry log directory exists so that the file can be created.
-function M.ensure_exists()
+function entry_log.ensure_exists()
   local filename = config.get_log_file()
   local dir = pth.dirname(filename)
   if not pth.exists(dir) then
@@ -153,4 +164,4 @@ function M.ensure_exists()
   end
 end
 
-return M
+return entry_log

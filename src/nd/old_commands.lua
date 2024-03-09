@@ -16,7 +16,12 @@ end
 
 local function handle_report(options)
   print(string.format("Showing report for %s", options.date))
-  report.simple_report(options.date, options.project, options.context, options.tag)
+  local r = report.simple_report(options.date, options.project, options.context, options.tag)
+  if r == nil then
+    print("nothing to report")
+  else
+    print(r:render())
+  end
 end
 
 local function handle_edit(_)
@@ -24,11 +29,21 @@ local function handle_edit(_)
   entry_log.edit_log()
 end
 
+local function handle_pomo(options)
+  local cmd = options.pomo_command
+  if cmd == "start" then
+    pomo.start_session(options.type)
+  else
+    print("wtf", options.command)
+  end
+end
+
 local actions = {
   add = handle_add,
   hello = handle_hello,
   edit = handle_edit,
   report = handle_report,
+  pomo = handle_pomo,
 }
 
 local M = {}

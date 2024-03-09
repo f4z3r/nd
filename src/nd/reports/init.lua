@@ -1,12 +1,11 @@
-local string = require("string")
 local table = require("table")
-
-local entry_log = require("nd.entry_log")
-local records = require("nd.records")
 local tables = require("nd.tables")
 local utils = require("nd.utils")
 
-local M = {}
+local entry_log = require("nd.entry_log")
+local records = require("nd.records")
+
+local reports = {}
 
 local Report = {}
 
@@ -75,7 +74,7 @@ function Report:render()
       record.description,
       record.context,
       table.concat(record.tags:to_table(), ","),
-      string.format("%dm", record.duration)
+      record.duration:fmt("%Hh %Mm")
     )
   end
   local durations = utils.map(recs, function(record)
@@ -84,7 +83,7 @@ function Report:render()
   local sum = utils.reduce(durations, function(acc, val)
     return acc + val
   end)
-  tbl:row("total", "", "", "", string.format("%dm", sum))
+  tbl:row("total", "", "", "", sum:fmt("%Hh %Mm"))
   print(tbl:render())
 end
 
@@ -96,12 +95,11 @@ function Report:add_records(recs)
   end
 end
 
-M.Report = Report
+reports.Report = Report
 
-function M.simple_report(raw_date, project_filter, context_filter, tag_filter)
+function reports.simple_report(raw_date, project_filter, context_filter, tag_filter)
   local entries = entry_log.get_entries(raw_date)
   if #entries < 1 then
-    print("nothing to report")
     return
   end
   local report = Report:new()
@@ -119,7 +117,7 @@ function M.simple_report(raw_date, project_filter, context_filter, tag_filter)
   if #tag_filter > 0 then
     report:filter_tags(table.unpack(tag_filter))
   end
-  report:render()
+  return report
 end
 
-return M
+return reports

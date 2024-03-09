@@ -27,13 +27,6 @@ context("Given entries in the log file,", function()
       assert.are.equal("context", basic_entry_with_context.context)
     end)
 
-    it("should support pomodoros retrieval", function()
-      assert.is_false(basic_entry_with_tags:is_active())
-      assert.is_true(basic_entry_with_running_pomo:is_active())
-      assert.is_false(entry:is_active())
-      assert.is_false(entry_no_report:is_active())
-    end)
-
     it("should support a project", function()
       assert.are.equal(nil, basic_entry.project)
       assert.are.equal(nil, basic_entry_with_running_pomo.project)

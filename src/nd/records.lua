@@ -5,7 +5,7 @@ local M = {}
 ---a log entry with an associated duration.
 ---@class Record:Entry
 ---@field entry Entry entry providing context to the record
----@field duration number duration of the record in minutes
+---@field duration dateObject duration of the record in minutes
 local Record = entry_log.Entry:new()
 
 ---create a new record from a log entry.
