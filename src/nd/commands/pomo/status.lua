@@ -1,5 +1,7 @@
 local str_utils = require("nd.utils.strings")
 
+local timer = require("nd.timer")
+
 local status = {}
 
 function status.register_command(parser)
@@ -11,7 +13,12 @@ function status.register_command(parser)
 end
 
 function status.execute(options)
-  error("not implemented")
+  local name, _ = timer.get_active()
+  if not name then
+    print("-")
+  else
+    print(name)
+  end
 end
 
 return status

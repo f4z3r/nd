@@ -145,11 +145,4 @@ function timer.notify(level, title, description, timeout, bell)
   os.execute(cmd)
 end
 
----return the next session type to launch
----@return SessionType
-function timer.next_session_type()
-  -- TODO actually implement
-  return "work"
-end
-
 return timer

@@ -1,5 +1,6 @@
 local str_utils = require("nd.utils.strings")
 local timer = require("nd.timer")
+local entry_log = require("nd.entry_log")
 
 local start = {}
 
@@ -15,7 +16,7 @@ function start.execute(options)
     print("Session already running")
     os.exit(1)
   end
-  local session_type = options.type or timer.next_session_type()
+  local session_type = options.type or entry_log.next_pomodoro_session_type()
   timer.start(session_type)
 end
 

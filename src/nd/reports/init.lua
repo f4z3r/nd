@@ -105,8 +105,10 @@ function reports.simple_report(raw_date, project_filter, context_filter, tag_fil
   local report = Report:new()
   for idx = 2, #entries do
     local record = records.Record:new(entries[idx])
-    record:update_duration_since(entries[idx - 1])
-    report:add_record(record)
+    if record.project ~= "break" then
+      record:update_duration_since(entries[idx - 1])
+      report:add_record(record)
+    end
   end
   if project_filter then
     report:filter_project(project_filter)

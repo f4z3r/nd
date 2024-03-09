@@ -9,12 +9,15 @@
 
 ## TODO
 
-- [ ] add systemd timer
+- [x] add systemd timer
 - [ ] add a few tests
 - [ ] integrate into setup
 - [ ] improve docs
 - [ ] improve reporting
 
+- report
+  - if in the future, dim
+  - total other fg
 
 ## deps
 

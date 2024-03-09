@@ -1,15 +1,13 @@
 local math = require("math")
 local os = require("os")
 
-local M = {}
-
-M.DEFAULT_EDITOR = "nvim"
+local utils = {}
 
 ---get env variable or return the default.
 ---@param name string
 ---@param default string
 ---@return string
-function M.get_default_env(name, default)
+function utils.get_default_env(name, default)
   local val = os.getenv(name)
   if val == nil then
     return default
@@ -20,7 +18,7 @@ end
 ---convert to integer
 ---@param val number
 ---@return number
-function M.int(val)
+function utils.int(val)
   return math.floor(val)
 end
 
@@ -44,7 +42,7 @@ local function filter_table(tbl, fun)
   return res
 end
 
-function M.filter(tbl, fun)
+function utils.filter(tbl, fun)
   local is_array = #tbl > 0
   if is_array then
     return filter_array(tbl, fun)
@@ -69,7 +67,7 @@ local function map_table(tbl, fun)
   return res
 end
 
-function M.map(tbl, fun)
+function utils.map(tbl, fun)
   local is_array = #tbl > 0
   if is_array then
     return map_array(tbl, fun)
@@ -94,7 +92,7 @@ local function reduce_table(tbl, fun, init)
   return init
 end
 
-function M.reduce(tbl, fun, init)
+function utils.reduce(tbl, fun, init)
   local is_array = #tbl > 0
   if is_array then
     return reduce_array(tbl, fun, init)
@@ -151,6 +149,6 @@ function Set:to_table()
   return res
 end
 
-M.Set = Set
+utils.Set = Set
 
-return M
+return utils

@@ -1,4 +1,4 @@
-local add = require("nd.commands.add")
+local entry_log = require("nd.entry_log")
 local str_utils = require("nd.utils.strings")
 
 local hello = {}
@@ -9,10 +9,8 @@ function hello.register_command(parser)
     at the current time.]]))
 end
 
-function hello.execute(options)
-  -- delegate execution to add command
-  options.entry = "hello"
-  add.execute(options)
+function hello.execute(_)
+  entry_log.add("hello", "\n")
 end
 
 return hello
