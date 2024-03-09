@@ -30,13 +30,13 @@ function Table:render()
   local format_str = self:format_str()
   self:replace_nil()
   res[#res + 1] = text
-    :new(string.format(format_str, table.unpack(self._headers)))
+    :new(string.format(format_str, unpack(self._headers)))
     :bg(text.Color.White)
     :fg(text.Color.Black)
     :bold()
     :render()
   for _, row in ipairs(self._data) do
-    res[#res + 1] = string.format(format_str, table.unpack(row))
+    res[#res + 1] = string.format(format_str, unpack(row))
   end
   return table.concat(res, "\n")
 end

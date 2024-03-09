@@ -1,15 +1,17 @@
 # nd
 
+> [!CAUTION]
+> This is not ready to be used. It is still hacky.
+
 `nd` (pronounced "end") is a time tracking tool supporting the following features:
 
-- [ ] storing worklogs with projects, tags, and descriptions
-- [ ] pomodoro timer on projects
+- [x] storing worklogs with projects, tags, and descriptions
+- [x] pomodoro timer on projects
 - [ ] extensible via a plugin system
 
 
 ## TODO
 
-- [x] add systemd timer
 - [ ] add a few tests
 - [ ] integrate into setup
 - [ ] improve docs
@@ -45,15 +47,7 @@ TODO
 
 ## TODO
 
-- [ ] basic behaviour
-  - [x] hello command
-  - [x] add command
-  - [x] edit command
-  - [ ] report command
-    - [ ] basic report
-    - [ ] filtering
-  - [ ] extend command
-- [ ] pomodoro
+- [x] pomodoro
 - [ ] improve reporting output
 - [ ] write sample plugin for jira booking
 
@@ -144,6 +138,15 @@ State stored in end log.
 - `ND_CMD_PLUGINS_DIR`: default `~/.local/share/nd/cmd-plugins/`
    Command name taken from file name (first part before first dot), called with params and entry
    information for the day in JSON form
+
+
+## nix
+
+get shell: 
+
+```bash
+nix develop
+```
 
 ## JSON
 

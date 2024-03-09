@@ -145,4 +145,10 @@ function timer.notify(level, title, description, timeout, bell)
   os.execute(cmd)
 end
 
+function timer.notify_end(session_type)
+  local session_defaults = DEFAULTS[session_type]
+  local desc = string.format("Type: <u>%s</u>\n%s", session_type, session_defaults.descriptions.stop)
+  timer.notify("critical", "nd: a pomodoro timer completed", desc, 15, true)
+end
+
 return timer

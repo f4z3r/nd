@@ -1,0 +1,3 @@
+#!/usr/bin/env luajit
+
+return require("nd")

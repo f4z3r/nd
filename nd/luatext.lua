@@ -1,12 +1,6 @@
 local string = require("string")
 local table = require("table")
 
---- compatibility
-local _ENV = require("compat53.module")
-if setfenv then
-  setfenv(1, _ENV)
-end
-
 local ESCAPE_START = string.format("%c[", 27)
 local ESCAPE_END = "m"
 local RGB_FORMAT = ";2;%d;%d;%d"
@@ -198,7 +192,7 @@ function LuaText:prefix()
   end
   for key, val in pairs(self._colors) do
     if type(val) == "table" then
-      modifiers[#modifiers + 1] = ESCAPE_CODES[key] .. string.format(RGB_FORMAT, table.unpack(val))
+      modifiers[#modifiers + 1] = ESCAPE_CODES[key] .. string.format(RGB_FORMAT, unpack(val))
     else
       modifiers[#modifiers + 1] = ESCAPE_CODES[key] .. string.format(ANSI256_FORMAT, val)
     end

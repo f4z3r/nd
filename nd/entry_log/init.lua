@@ -93,7 +93,7 @@ function entry_log.add_pomodoro(session_type)
   elseif session_type == "long-rest" then
     val:add_long_rest()
   end
-  update_last_line(val:to_str())
+  update_last_line(val:to_str() .. "\n")
 end
 
 function entry_log.next_pomodoro_session_type()

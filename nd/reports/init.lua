@@ -117,7 +117,7 @@ function reports.simple_report(raw_date, project_filter, context_filter, tag_fil
     report:filter_context(context_filter)
   end
   if #tag_filter > 0 then
-    report:filter_tags(table.unpack(tag_filter))
+    report:filter_tags(unpack(tag_filter))
   end
   return report
 end
