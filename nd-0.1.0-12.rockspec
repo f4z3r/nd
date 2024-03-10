@@ -1,6 +1,6 @@
 local package_name = "nd"
-local package_version = "0.1.0-rc1"
-local rockspec_revision = "0"
+local package_version = "0.1.0"
+local rockspec_revision = "12"
 local github_account_name = "f4z3r"
 local github_repo_name = package_name
 
@@ -12,11 +12,14 @@ source = {
   url = "git://github.com/" .. github_account_name .. "/" .. github_repo_name .. ".git",
 }
 
-if package_version == "scm" then
-  source.branch = "master"
-else
-  source.tag = "v" .. package_version
-end
+-- if package_version == "scm" then
+--   source.branch = "master"
+-- else
+--   source.tag = "v" .. package_version
+-- end
+
+-- TODO remove once stable version is reached
+source.tag = "v0.1.0-rc" .. rockspec_revision
 
 description = {
   summary = 'Simple time tracking tool with a pomodoro timer.',
@@ -35,6 +38,7 @@ dependencies = {
   "lua-path >= 0.3",
   "date >= 2.2",
   "utf8 >= 0.1",
+  "argparse >= 0.7",
 }
 
 test_dependencies = {
@@ -49,7 +53,6 @@ build = {
   type = "builtin",
   modules = {
     ["nd"]                      = "nd/init.lua",
-    ["nd.args"]                 = "nd/args.lua",
     ["nd.config"]               = "nd/config.lua",
     ["nd.luatext"]              = "nd/luatext.lua",
     ["nd.luatables"]            = "nd/luatables.lua",
@@ -67,6 +70,7 @@ build = {
     ["nd.commands"]             = "nd/commands/init.lua",
     ["nd.commands.add"]         = "nd/commands/add.lua",
     ["nd.commands.complete"]    = "nd/commands/complete.lua",
+    ["nd.commands.report"]      = "nd/commands/report.lua",
     ["nd.commands.edit"]        = "nd/commands/edit.lua",
     ["nd.commands.hello"]       = "nd/commands/hello.lua",
     ["nd.commands.pomo"]        = "nd/commands/pomo/init.lua",

@@ -6,8 +6,6 @@ local string = require("string")
 local date = require("date")
 local json = require("rapidjson")
 
-local str_utils = require("nd.utils.strings")
-
 local SECOND_TO_MICROSECOND = 1000000
 -- TODO make this configurable
 local NOTIFICATION_SOUND = "/home/f4z3r/.local/share/uair/notification-sound.wav"
@@ -66,8 +64,12 @@ function timer.start(session_type)
   local session_defaults = DEFAULTS[session_type]
   local duration_str = string.format("%dm", math.floor(session_defaults.duration:spanminutes()))
   local service = service_name_from_session_type(session_type)
-  local cmd =
-    string.format("systemd-run --on-active='%s' --user --unit %s %s 2> /dev/null", duration_str, service, CALLBACK)
+  local cmd = string.format(
+    "systemd-run --on-active='%s' --user -E PATH -E DBUS_SESSION_BUS_ADDRESS --unit %s %s 2> /dev/null",
+    duration_str,
+    service,
+    CALLBACK
+  )
   os.execute(cmd)
   local desc = string.format("Type: <u>%s</u>\n%s", session_type, session_defaults.descriptions.start)
   timer.notify("low", "nd: started a pomodoro timer", desc, 5)
@@ -117,8 +119,11 @@ function timer.get_active()
   end
   local t = timers[1]
   local name = session_type_from_unit(t.unit)
-  local expires = date(t.left / SECOND_TO_MICROSECOND)
-  local duration = date.diff(expires, date(true))
+  local duration = date("00:00:00")
+  if type(t.left) == "number" then
+    local expires = date(t.left / SECOND_TO_MICROSECOND)
+    duration = date.diff(expires, date(true))
+  end
   return name, duration
 end
 
@@ -131,16 +136,10 @@ end
 ---@param timeout integer how long to show the notification in seconds
 ---@param bell boolean? whether to play a sound for the notification
 function timer.notify(level, title, description, timeout, bell)
-  timeout = timeout * 1000
-  local cmd = string.format(
-    'notify-send "%s" "%s" -a nd -t %d -u %s -i tomato',
-    str_utils.escape_quotes(title),
-    str_utils.escape_quotes(description),
-    timeout,
-    level
-  )
+  local cmd = string.format('notify-send "%s" "%s" -a nd -t %d -u %s -i tomato', title, description, timeout, level)
   if bell then
-    cmd = cmd .. string.format(" && aplay %s 2> /dev/null &", NOTIFICATION_SOUND)
+    -- TODO fix device stuff
+    cmd = cmd .. string.format(" && aplay -D plughw:1,2 %s 2> /dev/null &", NOTIFICATION_SOUND)
   end
   os.execute(cmd)
 end
