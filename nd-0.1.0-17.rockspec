@@ -1,6 +1,6 @@
 local package_name = "nd"
 local package_version = "0.1.0"
-local rockspec_revision = "12"
+local rockspec_revision = "17"
 local github_account_name = "f4z3r"
 local github_repo_name = package_name
 

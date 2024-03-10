@@ -1,6 +1,6 @@
 alias b := build
 
-version := "0.1.0-12"
+version := "0.1.0-17"
 
 default:
   @just --choose

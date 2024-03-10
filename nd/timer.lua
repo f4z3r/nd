@@ -28,7 +28,7 @@ local DEFAULTS = {
   work = {
     duration = date("00:25:00"),
     descriptions = {
-      start = "Work session started. Let's focus for 25 minutes. No distractions!",
+      start = "Work session started. Focus for 25 minutes. No distractions!",
       stop = "Work session finished. Stand up, get a coffee, walk around a bit, stretch...",
     },
   },
@@ -36,14 +36,14 @@ local DEFAULTS = {
     duration = date("00:05:00"),
     descriptions = {
       start = "Short break started. How about a coffee, some stretching, or a couple of push-ups?",
-      stop = "Break done, let's get back to focused work!",
+      stop = "Break done, get back to focused work!",
     },
   },
   ["long-rest"] = {
     duration = date("00:25:00"),
     descriptions = {
       start = "Long break started. Take the time to get some fresh air and move around.",
-      stop = "Break done, let's get back to focused work!",
+      stop = "Break done, get back to focused work!",
     },
   },
 }
@@ -65,7 +65,7 @@ function timer.start(session_type)
   local duration_str = string.format("%dm", math.floor(session_defaults.duration:spanminutes()))
   local service = service_name_from_session_type(session_type)
   local cmd = string.format(
-    "systemd-run --on-active='%s' --user -E PATH -E DBUS_SESSION_BUS_ADDRESS --unit %s %s 2> /dev/null",
+    "systemd-run --on-active='%s' --user -E PATH -E DISPLAY -E DBUS_SESSION_BUS_ADDRESS --unit %s %s 2> /dev/null",
     duration_str,
     service,
     CALLBACK
@@ -94,7 +94,7 @@ function timer.stop(notify)
         "low",
         "Timer stopped",
         string.format(
-          "Stopped timer '%s' with %dm left.",
+          "Stopped timer %s with %dm left.",
           session_type_from_unit(t.unit),
           math.floor(left:spanminutes())
         ),
@@ -136,12 +136,14 @@ end
 ---@param timeout integer how long to show the notification in seconds
 ---@param bell boolean? whether to play a sound for the notification
 function timer.notify(level, title, description, timeout, bell)
-  local cmd = string.format('notify-send "%s" "%s" -a nd -t %d -u %s -i tomato', title, description, timeout, level)
+  timeout = timeout * 1000
+  local notif_cmd =
+    string.format('notify-send "%s" "%s" -a nd -t %d -u %s -i tomato', title, description, timeout, level)
+  os.execute(string.format("sh -c '%s'", notif_cmd))
   if bell then
-    -- TODO fix device stuff
-    cmd = cmd .. string.format(" && aplay -D plughw:1,2 %s 2> /dev/null &", NOTIFICATION_SOUND)
+    local bell_cmd = string.format("aplay -D default %s", NOTIFICATION_SOUND)
+    os.execute(string.format("sh -c '%s'", bell_cmd))
   end
-  os.execute(cmd)
 end
 
 function timer.notify_end(session_type)
