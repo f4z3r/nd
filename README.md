@@ -1,168 +1,117 @@
 # nd
 
 > [!CAUTION]
-> This is not ready to be used. It is still hacky.
+> This is not ready to be used. The code is not yet properly refactored, and test coverage is
+> abysmal.
 
 `nd` (pronounced "end") is a time tracking tool supporting the following features:
 
-- [x] storing worklogs with projects, tags, and descriptions
-- [x] pomodoro timer on projects
-- [ ] extensible via a plugin system
+- Storing worklogs with projects, tags, and descriptions.
+- A file format that is fully text-based so that it can be edited manually.
+- Full reporting capabilities on the time worked.
+- A pomodoro timer which assigns pomodoros to specific tasks.
 
+## Installation
 
-## TODO
+This tool targets LuaJIT, and thus only supports Lua version 5.1. There is currently no plans to
+extend the compatibility of the tool beyond that version.
 
-- [ ] add a few tests
-- [ ] integrate into setup
-- [ ] improve docs
-- [ ] improve reporting
+Moreover the tool has a few external dependencies:
 
-- report
-  - if in the future, dim
-  - total other fg
+- `systemd`: used for the pomodoro timers.
+- `libnotify`: used via `send-notify` for notifications.
+- `aplay`: used to play notification sounds.
 
-## deps
-
-- aplay
-- notify-send (lib-notify)
-- systemd
-
-- date
-- luatables
-- luatext
-- rapidjson
-
+> [!NOTE]
+> I currently do not provide installation instructions as this is not stable. Once the tool becomes
+> stable, I will add instructions here.
 
 ## Usage
 
-Use the `nd -h` to get help on how to use the command.
+For information about how to use `nd`, use the `--help` options to get information about the
+possible commands and arguments:
 
-## Format
-
-TODO
-
-## Plugins
-
-TODO
-
-## TODO
-
-- [x] pomodoro
-- [ ] improve reporting output
-- [ ] write sample plugin for jira booking
-
----
-
-## Format
-
-```
-2024-02-27 10:11 **- project: some description that describes the task +tag1 +tag2 @context
+```sh
+nd -h
 ```
 
-- `2024-02-27 10:11`: end time of the task.
-- `***-`: number of completed pomodoros, running pomodoro shown with `-`
-- `project`: project to book on. There are a few special projects:
-  - `hello`: project that signalises the start of the day
-  - `break`: project that does not get included into reporting
-  - `!project`: project will be shown in reporting but does not count to total time worked
-- `description`: free text to describe the task
-- `+tag1`: tag to categorise tasks. Several tags can be provided.
-- `@context`: provides a context for the tasks, only a single context can be provided.
+```
+Usage: nd [-h] [--completion {bash,zsh,fish}] [<command>] ...
 
-## Entries
+Time tracking tool that incorporates pomodoro timers and is plugin capable.
 
-```bash
-nd add "project: bla +tag @context"
+Options:
+   -h, --help            Show this help message and exit.
+   --completion {bash,zsh,fish}
+                         Output a shell completion script for the specified shell.
+
+Commands:
+   hello                 Start tracking time for the day.
+   add                   Add a time tracking entry.
+   edit                  Edit the entry log manually.
+   report                Report activity for a day.
+   pomo                  Pomodoro timer.
+
+For more information see: https://github.com/f4z3r/nd
 ```
 
-## Reporting
+> If no command is provided to `nd`, it will behave like `edit`.
 
-```bash
-nd report [<date>] [context | tag | project ...]
-```
+## File Format
 
-If the date is not provided, should report for the current date.
-If a filter is provided, only report tasks that AND the filter.
+`nd` uses a single log file as its source of truth for the amount worked. By default, that file is
+located at `~/.local/state/nd/nd.log`. It can be edited using the `nd edit` command.
 
-Support reporting:
-
-- completed pomodoros for the time range, stopped
-- time table based on project, context, tag
-- total time
-- fully ignore tasks with `break` project
-- do not include `**` into
-
-## Pomodoro Timer
-
-Pause explicitely not supported because it should not be paused and continued
-
-```bash
-# content description ignored on rest
-nd pomo start "project: description +tag @context" [-c | --current]
-nd pomo stop [-c | --current]
-nd pomo toggle [-c | --current]
-nd pomo show [-d | --description] [--tags] [--context] [-p | --project] [--count] [-c | --current] [-t | --type] [-f | --format]
-# 23:45
-```
-
-when start ->
-move end date of current task to end time and add `-`, when show is called compute this (works for
-work)
-for break -> move time to end of session, do not update
-for stop -> move current to `+`, update end time to now
-
-
-Use systemd for timer:
-
-```bash
-systemd-run --on-active="25m" --user --unit work.service /bin/touch /tmp/foo
-```
-
-Consider setting these values for the timer:
+This log file contains entries as follows:
 
 ```
-AccurarySec=1
-WakeSystem=true
-RemainAfterElapse=false
+2024-03-09 16:45 *-*+*- GH-123: add tests for nd.commands module +oss +nd @home
 ```
 
-Notifications? -> via env var?
+Such a log line consist of the following parts:
 
-State stored in end log.
+- `2024-03-09 16:45`: A timestamp representing the *end* of the task.
+- `*-*+*-`: (optional) A pomodoro string. This pomodoro string represents how many pomodoros were
+  completed during that task. A `*` represents a work session, a `-` rest session, and a `+` long
+  rest session.
+- `GH-123:`: (optional) A project to which this task is assigned to.
+- `add tests for nd.commands module +oss +nd @home`: A description of the task. Such a description
+  *can* contain:
+  - A *single* context marked with `@`.
+  - A set of tags marked with `+`
+  The location of the context and tags within the description is not relevant.
 
 ## Configuration
 
-- `ND_LOG_FILE`: default `~/.local/state/nd.log`
-- `ND_EVENT_PLUGINS_DIR`: default `~/.local/share/nd/event-plugins/`
-   All plugins are called with JSON object for event (pomo event, report, add)
-- `ND_CMD_PLUGINS_DIR`: default `~/.local/share/nd/cmd-plugins/`
-   Command name taken from file name (first part before first dot), called with params and entry
-   information for the day in JSON form
+`nd` is configured via environment variables:
 
+- `ND_LOG_FILE`: (default: `~/.local/state/nd/nd.log`) the location of the log file.
+- `EDITOR`: (default: `nvim`) the editor to use when opening the log file via `nd edit`.
 
-## nix
+## Development
 
-get shell: 
+### Building
 
-```bash
-nix develop
+You can package the Lua rock locally using:
+
+```sh
+just build
 ```
 
-## JSON
+### Testing
 
-Event:
+Testing is performed via `busted`. It can be launched manually or via the `just` command:
 
-```json
-{
-    "type": "pomodoro",
-    "subtype": "work-start",
-    "project": "this",
-    "description": "that",
-    "tags": [ "tag1", "tag2" ],
-    "context": null,
-    "is-break": false,
-    "start-of-day": false,
-    ""
-}
+```sh
+just test
 ```
 
+### Roadmap
+
+For smaller things that I want to fix, see [`todo.md`](./todo.md).
+
+The following larger changes are being considered for `nd`:
+- A plugin system. This should allow to add custom code to both extend the tool with more commands,
+  but also run custom code on some events (such as when pomodoros complete).
+- Should the configuration potential increase, configuration via a standard configuration file might
+  make sense.
