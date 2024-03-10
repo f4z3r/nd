@@ -6,9 +6,9 @@ local report = {}
 
 function report.register_command(parser)
   local report_parser =
-      parser:command("report"):summary("Report activity for a day."):description(str_utils.trim_indents([[
-      Print a detailed report of the activities that occured during the day provided
-      as argument.]]))
+    parser:command("report"):summary("Report activity for a day."):description(str_utils.trim_indents([[
+    Print a detailed report of the activities that occured during the day provided
+    as argument.]]))
 
   report_parser:argument("date", "The date of the report.", date():fmt("%F"))
   report_parser:option("-p --project", "Project to filter by.")

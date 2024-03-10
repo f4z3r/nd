@@ -1,5 +1,5 @@
-local entry = require("nd.entry_log.entry")
 local date = require("date")
+local entry = require("nd.entry_log.entry")
 
 local records = {}
 

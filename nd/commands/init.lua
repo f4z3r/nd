@@ -13,12 +13,12 @@ local commands = {}
 ---@return table
 function commands.parse()
   local parser = argparse()
-      :name("nd")
-      :description("Time tracking tool that incorporates pomodoro timers and is plugin capable.")
-      :epilog("For more information see: https://github.com/f4z3r/nd")
-      :add_complete()
-      :require_command(false)
-      :command_target("command")
+    :name("nd")
+    :description("Time tracking tool that incorporates pomodoro timers and is plugin capable.")
+    :epilog("For more information see: https://github.com/f4z3r/nd")
+    :add_complete()
+    :require_command(false)
+    :command_target("command")
 
   hello.register_command(parser)
   add.register_command(parser)
