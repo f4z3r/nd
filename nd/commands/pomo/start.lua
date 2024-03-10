@@ -1,6 +1,5 @@
 local str_utils = require("nd.utils.strings")
 local timer = require("nd.timer")
-local entry_log = require("nd.entry_log")
 
 local start = {}
 
@@ -12,6 +11,7 @@ function start.register_command(parser)
 end
 
 function start.execute(options)
+  local entry_log = require("nd.entry_log")
   if timer.get_active() then
     print("Session already running")
     os.exit(1)

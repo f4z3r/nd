@@ -1,6 +1,6 @@
-local args = require("nd.args")
+local commands = require("nd.commands")
 
-local opts = args.parse()
+local opts = commands.parse()
 local cmd = opts.command
 
 if cmd then

@@ -1,7 +1,5 @@
 local str_utils = require("nd.utils.strings")
 
-local entry_log = require("nd.entry_log")
-
 local edit = {}
 
 function edit.register_command(parser)
@@ -13,6 +11,7 @@ function edit.register_command(parser)
 end
 
 function edit.execute(_)
+  local entry_log = require("nd.entry_log")
   entry_log.ensure_exists()
   entry_log.edit_log()
 end

@@ -1,8 +1,5 @@
 local str_utils = require("nd.utils.strings")
 
-local timer = require("nd.timer")
-local entry_log = require("nd.entry_log")
-
 local toggle = {}
 
 function toggle.register_command(parser)
@@ -11,6 +8,8 @@ function toggle.register_command(parser)
 end
 
 function toggle.execute(_)
+  local timer = require("nd.timer")
+  local entry_log = require("nd.entry_log")
   if timer.get_active() then
     timer.stop(true)
   else

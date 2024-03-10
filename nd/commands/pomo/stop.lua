@@ -1,7 +1,5 @@
 local str_utils = require("nd.utils.strings")
 
-local timer = require("nd.timer")
-
 local stop = {}
 
 function stop.register_command(parser)
@@ -10,6 +8,7 @@ function stop.register_command(parser)
 end
 
 function stop.execute(_)
+  local timer = require("nd.timer")
   timer.stop(true)
 end
 

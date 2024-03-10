@@ -1,6 +1,3 @@
-local entry_log = require("nd.entry_log")
-local timer = require("nd.timer")
-
 local complete = {}
 
 function complete.register_command(parser)
@@ -8,6 +5,8 @@ function complete.register_command(parser)
 end
 
 function complete.execute(_)
+  local entry_log = require("nd.entry_log")
+  local timer = require("nd.timer")
   local session_type = timer.get_active()
   if not session_type then
     session_type = entry_log.next_pomodoro_session_type()

@@ -1,4 +1,3 @@
-local entry_log = require("nd.entry_log")
 local str_utils = require("nd.utils.strings")
 
 local hello = {}
@@ -10,6 +9,7 @@ function hello.register_command(parser)
 end
 
 function hello.execute(_)
+  local entry_log = require("nd.entry_log")
   entry_log.add("hello", "\n")
 end
 

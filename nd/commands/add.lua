@@ -1,4 +1,3 @@
-local entry_log = require("nd.entry_log")
 local str_utils = require("nd.utils.strings")
 
 local add = {}
@@ -20,6 +19,7 @@ function add.register_command(parser)
 end
 
 function add.execute(options)
+  local entry_log = require("nd.entry_log")
   entry_log.add(options.entry)
 end
 
