@@ -1,5 +1,5 @@
 local package_name = "nd"
-local package_version = "0.1.0"
+local package_version = "0.1.0-rc1"
 local rockspec_revision = "0"
 local github_account_name = "f4z3r"
 local github_repo_name = package_name
@@ -19,25 +19,22 @@ else
 end
 
 description = {
-  -- summary = 'Elegant Lua unit testing',
-  -- detailed = [[
-  --   An elegant, extensible, testing framework.
-  --   Ships with a large amount of useful asserts,
-  --   plus the ability to write your own. Output
-  --   in pretty or plain terminal format, JSON,
-  --   or TAP for CI integration. Great for TDD
-  --   and unit, integration, and functional tests.
-  -- ]],
-  -- homepage = "https://lunarmodules.github.io/busted/",
-  -- license = 'MIT <http://opensource.org/licenses/MIT>'
+  summary = 'Simple time tracking tool with a pomodoro timer.',
+  detailed = [[
+    A tool to track work and other tasks, allowing
+    to assign them projects, tags, contexts, and
+    more. The tool also offers pomodoro timer
+    functionality via systemd.
+  ]],
+  homepage = "https://github.com/f4z3r/nd",
+  license = "MIT <http://opensource.org/licenses/MIT>"
 }
 
 dependencies = {
   "lua == 5.1",
-  "luatext >= 1.0",
   "lua-path >= 0.3",
   "date >= 2.2",
-  "luatables >= 0.1",
+  "utf8 >= 0.1",
 }
 
 test_dependencies = {
@@ -55,6 +52,7 @@ build = {
     ["nd.args"]                 = "nd/args.lua",
     ["nd.config"]               = "nd/config.lua",
     ["nd.luatext"]              = "nd/luatext.lua",
+    ["nd.luatables"]            = "nd/luatables.lua",
     ["nd.records"]              = "nd/records.lua",
     ["nd.timer"]                = "nd/timer.lua",
 

@@ -1,5 +1,5 @@
 local table = require("table")
-local tables = require("nd.tables")
+local tables = require("nd.luatables")
 local utils = require("nd.utils")
 
 local entry_log = require("nd.entry_log")
@@ -65,7 +65,10 @@ function Report:filter()
 end
 
 function Report:render()
-  local tbl = tables.Table:new()
+  local tbl = tables.Table
+    :new()
+    :border()
+    :border_style(tables.BorderStyle.Double)
   tbl:headers("project", "description", "context", "tags", "duration")
   local recs = self:filter()
   for _, record in ipairs(recs) do

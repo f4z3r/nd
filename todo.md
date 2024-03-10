@@ -41,3 +41,4 @@ Considerations:
 - [ ] allow to configure to not behave like `edit` when no command is provided. Something such as
   `ND_DEFAULT_COMMAND` that can be set in the env.
 - [ ] allow to configure bell sound on notification using `ND_NOFITICATION_SOUND`.
+- [ ] provide other types of reports, such as ASCII art reports, JSON output reports, or the like.

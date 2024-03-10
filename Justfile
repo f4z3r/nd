@@ -12,6 +12,6 @@ build:
 test:
   busted ./
 
-[confirm("Wipe build artefacts and installed binaries?")]
+[confirm("Wipe build artefacts?")]
 clear:
   rm -rf build
