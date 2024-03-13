@@ -85,8 +85,9 @@ Such a log line consist of the following parts:
 
 `nd` is configured via environment variables:
 
-- `ND_LOG_FILE`: (default: `~/.local/state/nd/nd.log`) the location of the log file.
 - `EDITOR`: (default: `nvim`) the editor to use when opening the log file via `nd edit`.
+- `ND_LOG_FILE`: (default: `~/.local/state/nd/nd.log`) the location of the log file.
+- `ND_CACHE_FILE`: (default: `~/.local/state/nd/cache`) the location of the cache file.
 
 ## Development
 

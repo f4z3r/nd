@@ -1,6 +1,6 @@
 local table = require("table")
 local text = require("luatext")
-local utf8 = require("lua-utf8")
+local utf8 = require("utf8")
 
 -- compatibility
 if not table.unpack and unpack then
@@ -12,14 +12,6 @@ end
 local Text = text.Text
 
 local luatables = {}
-
--- re-exports
----@enum Color
----@see https://github.com/f4z3r/luatext/blob/v1.1.0/docs/reference.md#color
-luatables.Color = text.Color
----@class Text
----@see https://github.com/f4z3r/luatext/blob/v1.1.0/docs/reference.md#text
-luatables.Text = text.Text
 
 local BORDERS = {
   single = {

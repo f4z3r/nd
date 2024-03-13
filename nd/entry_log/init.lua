@@ -5,6 +5,7 @@ local string = require("string")
 
 local config = require("nd.config")
 local entry = require("nd.entry_log.entry")
+local timer = require("nd.timer")
 
 local function get_last_line()
   local filename = config.get_log_file()
@@ -44,7 +45,13 @@ function entry_log.add(raw, prefix)
   prefix = prefix or ""
   local out = assert(io.open(config.get_log_file(), "a+"))
   local now = date():fmt(entry.DATETIME_FMT)
-  out:write(string.format("%s%s %s\n", prefix, now, raw))
+  if timer.is_cache_empty() then
+    out:write(string.format("%s%s %s\n", prefix, now, raw))
+  else
+    local cache = timer.get_cache()
+    out:write(string.format("%s%s %s %s\n", prefix, now, cache, raw))
+    timer.wipe_cache()
+  end
   out:close()
 end
 
@@ -86,6 +93,15 @@ end
 function entry_log.add_pomodoro(session_type)
   local last_line = get_last_line()
   local val = entry.Entry.from_str(last_line)
+  if not val:is_past() then
+    timer.add_to_cache(session_type)
+    return
+  end
+  if not timer.is_cache_empty() then
+    local cache = timer.get_cache()
+    val:add_raw_pomo_str(cache)
+    timer.wipe_cache()
+  end
   if session_type == "work" then
     val:add_pomodoro()
   elseif session_type == "rest" then

@@ -134,6 +134,10 @@ function Entry:add_long_rest()
   self._pomo_str = self._pomo_str .. "+"
 end
 
+function Entry:add_raw_pomo_str(pomo_str)
+  self._pomo_str = self._pomo_str .. pomo_str
+end
+
 ---@return SessionType?
 function Entry:last_session()
   if self._pomo_str == "" then
