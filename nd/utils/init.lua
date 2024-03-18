@@ -35,7 +35,7 @@ end
 local function filter_table(tbl, fun)
   local res = {}
   for key, val in pairs(tbl) do
-    if fun(val) then
+    if fun(key, val) then
       res[key] = val
     end
   end
@@ -62,7 +62,8 @@ end
 local function map_table(tbl, fun)
   local res = {}
   for key, val in pairs(tbl) do
-    res[key] = fun(val)
+    local new_k, new_val = fun(key, val)
+    res[new_k] = new_val
   end
   return res
 end
