@@ -54,9 +54,6 @@ local DEFAULTS = {
 
 local timer = {}
 
----@alias SessionType "work" | "rest" | "long-rest"
-
-
 timer.SESSION_MAP = {
   work = "*",
   rest = "-",

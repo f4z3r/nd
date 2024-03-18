@@ -5,38 +5,8 @@ local string = require("string")
 
 local config = require("nd.config")
 local entry = require("nd.entry_log.entry")
+local file = require("nd.file")
 local timer = require("nd.timer")
-
-local function get_last_line()
-  local filename = config.get_log_file()
-  local fh = assert(io.open(filename, "r"))
-  -- offset by one to skip trailing newline
-  local length = fh:seek("end", -1)
-  local res = 0
-  if length > 1024 then
-    res = fh:seek("end", -1024)
-  else
-    res = fh:seek("set")
-  end
-  local next = res
-  local last_line = ""
-  while next < length do
-    res = fh:seek()
-    last_line = fh:read("l")
-    next = fh:seek()
-  end
-  fh:close()
-  return last_line, res
-end
-
-local function update_last_line(str)
-  local _, last_line_offset = get_last_line()
-  local filename = config.get_log_file()
-  local fh = assert(io.open(filename, "r+"))
-  fh:seek("set", last_line_offset)
-  fh:write(str)
-  fh:close()
-end
 
 local entry_log = {}
 
@@ -92,7 +62,7 @@ end
 ---add a pomodoro session to the last entry of the log
 ---@param session_type SessionType
 function entry_log.add_pomodoro(session_type)
-  local last_line = get_last_line()
+  local last_line = file.get_last_line(config.get_log_file())
   local val = entry.Entry.from_str(last_line)
   if not val:is_past() then
     timer.add_to_cache(session_type)
@@ -110,7 +80,7 @@ function entry_log.add_pomodoro(session_type)
   elseif session_type == "long-rest" then
     val:add_long_rest()
   end
-  update_last_line(val:to_str() .. "\n")
+  file.update_last_line(config.get_log_file(), val:to_str() .. "\n")
 end
 
 function entry_log.next_pomodoro_session_type()
