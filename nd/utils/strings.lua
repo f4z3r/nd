@@ -5,9 +5,8 @@ local strings = {}
 ---escape quotes in string
 ---@param str string
 ---@return string
-function strings.escape_quotes(str)
-  local res, _ = str:gsub("'", "\\'")
-  res, _ = res:gsub('"', '\\"')
+function strings.escape_single_quotes(str)
+  local res, _ = str:gsub("'", "'\\''")
   return res
 end
 

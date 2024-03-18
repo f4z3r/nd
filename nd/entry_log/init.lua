@@ -10,6 +10,7 @@ local timer = require("nd.timer")
 local function get_last_line()
   local filename = config.get_log_file()
   local fh = assert(io.open(filename, "r"))
+  -- offset by one to skip trailing newline
   local length = fh:seek("end", -1)
   local res = 0
   if length > 1024 then
