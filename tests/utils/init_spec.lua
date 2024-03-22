@@ -5,6 +5,18 @@ local string = require("string")
 local utils = require("nd.utils")
 
 context("Standard utilities", function()
+  describe("when inverting tables", function()
+    local tbl = {
+      hello = "world",
+      these = "people",
+    }
+    local res = utils.invert(tbl)
+
+    it("it should invert the table correctly", function()
+      assert.are.same({ world = "hello", people = "these" }, res)
+    end)
+  end)
+
   describe("when applying filters to arrays", function()
     local init = {
       "this",

@@ -3,6 +3,17 @@ local os = require("os")
 
 local utils = {}
 
+---invert a table, using values as keys and vice-versa
+---@param tbl table
+---@return table
+function utils.invert(tbl)
+  local res = {}
+  for k, v in pairs(tbl) do
+    res[v] = k
+  end
+  return res
+end
+
 ---get env variable or return the default.
 ---@param name string
 ---@param default string
